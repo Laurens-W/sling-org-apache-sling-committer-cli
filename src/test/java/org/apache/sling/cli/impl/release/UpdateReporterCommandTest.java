@@ -36,10 +36,7 @@ import org.apache.sling.testing.mock.osgi.junit.OsgiContext;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,20 +45,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockIgnore({
-    // https://github.com/powermock/powermock/issues/864
-    "com.sun.org.apache.xerces.*",
-    "javax.xml.*",
-    "org.w3c.dom.*"
-})
 public class UpdateReporterCommandTest {
 
     private CloseableHttpClient client;
@@ -89,7 +79,6 @@ public class UpdateReporterCommandTest {
     @Test
     @PrepareForTest({LoggerFactory.class})
     public void testDryRun() throws Exception {
-        mockStatic(LoggerFactory.class);
         Logger logger = mock(Logger.class);
         when(LoggerFactory.getLogger(UpdateReporterCommand.class)).thenReturn(logger);
         UpdateReporterCommand updateReporterCommand = spy(new UpdateReporterCommand());
@@ -122,7 +111,6 @@ public class UpdateReporterCommandTest {
                 updateReporter instanceof UpdateReporterCommand);
         CloseableHttpResponse response = mock(CloseableHttpResponse.class);
         StatusLine statusLine = mock(StatusLine.class);
-        mockStatic(UserInput.class);
         String question =
                 "Should the following releases be added to the Apache Reporter System?\n  - Apache Sling CLI 1\n  - Apache Sling CLI 2\n";
         when(UserInput.yesNo(question, InputOption.YES)).thenReturn(InputOption.YES);

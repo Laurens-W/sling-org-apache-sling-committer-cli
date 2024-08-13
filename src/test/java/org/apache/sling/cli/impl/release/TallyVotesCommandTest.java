@@ -42,11 +42,8 @@ import org.apache.sling.testing.mock.osgi.junit.OsgiContext;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.osgi.framework.ServiceReference;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,19 +52,11 @@ import picocli.CommandLine;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PowerMockIgnore({
-                         // https://github.com/powermock/powermock/issues/864
-                         "com.sun.org.apache.xerces.*",
-                         "javax.xml.*",
-                         "org.w3c.dom.*",
-                         "javax.net.ssl.*"
-                 })
 public class TallyVotesCommandTest {
 
     @Before
@@ -83,7 +72,6 @@ public class TallyVotesCommandTest {
     @Test
     @PrepareForTest({LoggerFactory.class})
     public void testDryRun() throws Exception {
-        mockStatic(LoggerFactory.class);
         Logger logger = mock(Logger.class);
         when(LoggerFactory.getLogger(TallyVotesCommand.class)).thenReturn(logger);
         List<Email> thread = new ArrayList<>(){{
@@ -131,7 +119,6 @@ public class TallyVotesCommandTest {
     @Test
     @PrepareForTest({LoggerFactory.class})
     public void testDryRunNotEnoughBindingVotes() throws Exception {
-        mockStatic(LoggerFactory.class);
         Logger logger = mock(Logger.class);
         when(LoggerFactory.getLogger(TallyVotesCommand.class)).thenReturn(logger);
         List<Email> thread = new ArrayList<>(){{
